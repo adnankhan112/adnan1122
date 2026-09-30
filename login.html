@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login / Sign Up</title>
+<style>
+    body { font-family: Arial, sans-serif; background: #f5f5f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+    .box { background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); width: 300px; text-align: center; }
+    h2 { color: #2c3e50; margin-bottom: 20px; }
+    input { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+    button { width: 100%; padding: 10px; margin-top: 10px; background: #3498db; color: #fff; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; }
+    button:hover { background: #2980b9; }
+    .toggle { margin-top: 15px; font-size: 0.9em; color: #3498db; cursor: pointer; }
+    .msg { margin-top: 10px; font-size: 0.9em; color: #e74c3c; }
+</style>
+</head>
+<body>
+
+<div class="box" id="loginBox">
+    <h2>Login</h2>
+    <input type="text" id="loginUser" placeholder="Username">
+    <input type="password" id="loginPass" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <p class="msg" id="loginMsg"></p>
+    <p class="toggle" onclick="showSignup()">No account? Sign up</p>
+</div>
+
+<div class="box" id="signupBox" style="display:none;">
+    <h2>Sign Up</h2>
+    <input type="text" id="signupUser" placeholder="Choose a username">
+    <input type="password" id="signupPass" placeholder="Choose a password">
+    <button onclick="signup()">Sign Up</button>
+    <p class="msg" id="signupMsg"></p>
+    <p class="toggle" onclick="showLogin()">Already have an account? Login</p>
+</div>
+
+<script>
+    function showSignup() {
+        document.getElementById('loginBox').style.display = 'none';
+        document.getElementById('signupBox').style.display = 'block';
+    }
+    function showLogin() {
+        document.getElementById('signupBox').style.display = 'none';
+        document.getElementById('loginBox').style.display = 'block';
+    }
+    function signup() {
+        const user = document.getElementById('signupUser').value.trim();
+        const pass = document.getElementById('signupPass').value.trim();
+        const msg = document.getElementById('signupMsg');
+        if (!user || !pass) { msg.textContent = 'Please fill both fields.'; return; }
+        if (localStorage.getItem('user_' + user)) { msg.textContent = 'Username already taken.'; return; }
+        localStorage.setItem('user_' + user, pass);
+        msg.style.color = '#27ae60';
+        msg.textContent = 'Account created! You can log in now.';
+    }
+    function login() {
+        const user = document.getElementById('loginUser').value.trim();
+        const pass = document.getElementById('loginPass').value.trim();
+        const msg = document.getElementById('loginMsg');
+        const savedPass = localStorage.getItem('user_' + user);
+        if (savedPass === null) { msg.textContent = 'No account with that username.'; return; }
+        if (savedPass !== pass) { msg.textContent = 'Wrong password.'; return; }
+        msg.style.color = '#27ae60';
+        msg.textContent = 'Login successful! Welcome, ' + user + '.';
+    }
+</script>
+
+</body>
+</html>
